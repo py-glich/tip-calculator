@@ -1,146 +1,93 @@
-const billInput = document.getElementById("bill");
+const bill = document.getElementById("bill");
+const people = document.getElementById("people");
+const customTip = document.getElementById("customTip");
 
-const peopleInput = document.getElementById("people");
+const tipButtons = document.querySelectorAll(".tip");
 
-const customTipInput =
-  document.getElementById("custom-tip");
+const tipAmountEl = document.getElementById("tipAmount");
+const totalAmountEl = document.getElementById("totalAmount");
+const perPersonEl = document.getElementById("perPerson");
 
-const tipButtons =
-  document.querySelectorAll(".tip-btn");
+const billError = document.getElementById("billError");
+const tipError = document.getElementById("tipError");
+const peopleError = document.getElementById("peopleError");
 
-const tipAmountText =
-  document.getElementById("tip-amount");
+const resetBtn = document.getElementById("reset");
 
-const grandTotalText =
-  document.getElementById("grand-total");
+let tipValue = 10;
 
-const perPersonText =
-  document.getElementById("per-person");
-
-const billError =
-  document.getElementById("bill-error");
-
-const tipError =
-  document.getElementById("tip-error");
-
-const peopleError =
-  document.getElementById("people-error");
-
-const resetBtn =
-  document.getElementById("reset-btn");
-
-let selectedTip = 10;
+// CALCULATE FUNCTION
 function calculate() {
+  let billVal = Number(bill.value);
+  let peopleVal = Number(people.value);
 
-  const bill =
-    Number(billInput.value);
-
-  const people =
-    Number(peopleInput.value);
-
+  // errors reset
   billError.textContent = "";
   tipError.textContent = "";
   peopleError.textContent = "";
 
-  if (billInput.value !== "" && bill <= 0) {
-    billError.textContent =
-      "Bill must be greater than 0";
+  // validation
+  if (billVal <= 0) {
+    billError.textContent = "Bill must be greater than 0";
   }
 
-  if (selectedTip < 0 || selectedTip > 100) {
-    tipError.textContent =
-      "Tip must be between 0 and 100";
+  if (tipValue < 0 || tipValue > 100) {
+    tipError.textContent = "Tip must be 0–100";
   }
 
-  if (people < 1 || !Number.isInteger(people)) {
-    peopleError.textContent =
-      "People must be at least 1";
+  if (peopleVal < 1) {
+    peopleError.textContent = "People must be at least 1";
   }
 
-  const tipAmount =
-    (bill * selectedTip) / 100;
+  if (!billVal || peopleVal < 1) {
+    tipAmountEl.textContent = "Rs 0.00";
+    totalAmountEl.textContent = "Rs 0.00";
+    perPersonEl.textContent = "Rs 0.00";
+    return;
+  }
 
-  const grandTotal =
-    bill + tipAmount;
+  const tipAmount = (billVal * tipValue) / 100;
+  const total = billVal + tipAmount;
+  const perPerson = total / peopleVal;
 
-  const perPerson =
-    people > 0
-      ? grandTotal / people
-      : 0;
-
-  tipAmountText.textContent =
-    `Rs ${tipAmount.toFixed(2)}`;
-
-  grandTotalText.textContent =
-    `Rs ${grandTotal.toFixed(2)}`;
-
-  perPersonText.textContent =
-    `Rs ${perPerson.toFixed(2)}`;
+  tipAmountEl.textContent = `Rs ${tipAmount.toFixed(2)}`;
+  totalAmountEl.textContent = `Rs ${total.toFixed(2)}`;
+  perPersonEl.textContent = `Rs ${perPerson.toFixed(2)}`;
 }
-billInput.addEventListener(
-  "input",
-  calculate
-);
 
-peopleInput.addEventListener(
-  "input",
-  calculate
-);
-
-customTipInput.addEventListener(
-  "input",
-  function () {
-
-    selectedTip =
-      Number(customTipInput.value);
-
-    tipButtons.forEach(btn => {
-      btn.classList.remove("active");
-    });
-
-    calculate();
-  }
-);
-tipButtons.forEach(button => {
-
-  button.addEventListener(
-    "click",
-    function () {
-
-      tipButtons.forEach(btn => {
-        btn.classList.remove("active");
-      });
-
-      button.classList.add("active");
-
-      selectedTip =
-        Number(button.textContent.replace("%", ""));
-
-      customTipInput.value = "";
-
-      calculate();
-    }
-  );
+// EVENTS
+bill.addEventListener("input", calculate);
+people.addEventListener("input", calculate);
+customTip.addEventListener("input", () => {
+  tipValue = Number(customTip.value) || 0;
+  tipButtons.forEach(b => b.classList.remove("active"));
+  calculate();
 });
-resetBtn.addEventListener(
-  "click",
-  function () {
 
-    billInput.value = "";
+// TIP BUTTONS
+tipButtons.forEach(btn => {
+  btn.addEventListener("click", () => {
+    tipButtons.forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
 
-    peopleInput.value = 1;
-
-    customTipInput.value = "";
-
-    selectedTip = 10;
-
-    tipButtons.forEach(btn => {
-      btn.classList.remove("active");
-    });
-
-    tipButtons[0].classList.add("active");
-
+    tipValue = Number(btn.dataset.tip);
+    customTip.value = "";
     calculate();
-  }
-);
+  });
+});
+
+// RESET
+resetBtn.addEventListener("click", () => {
+  bill.value = "";
+  people.value = 1;
+  customTip.value = "";
+  tipValue = 10;
+
+  tipButtons.forEach(b => b.classList.remove("active"));
+  tipButtons[0].classList.add("active");
+
+  calculate();
+});
+
+// INIT
 calculate();
