@@ -97,3 +97,53 @@ So this app makes it:
 Built while learning frontend development 🚀
 ### Option 1 (Easiest)
 Just open:
+
+in your browser.
+
+---
+
+### Option 2 (Recommended for dev)
+Use VS Code Live Server:
+
+1. Install Live Server extension
+2. Right-click `index.html`
+3. Click **Open with Live Server**
+
+---
+
+## 🛠️ Built with
+
+- HTML5 (structure)
+- CSS3 (design)
+- JavaScript (logic)
+
+---
+
+## 🎯 Why this project exists
+
+Because splitting bills in real life is always:
+
+- confusing 😵‍💫  
+- slow ⏳  
+- and someone always miscalculates 😭  
+
+So this app makes it:
+✔ fast  
+✔ fair  
+✔ stress-free  
+
+---
+
+## 🔥 What makes this project good
+
+- Clean UI
+- Real-time updates
+- Proper input validation
+- Responsive layout
+- Handles edge cases (like 0 people or invalid inputs)
+
+---
+
+## 📌 Author
+
+Built while learning frontend development 🚀
